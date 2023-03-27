@@ -1,4 +1,7 @@
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -131,10 +134,18 @@ public class TestLoan {
         });
     }
 
-    @Test
-    public void testsetRate(){
-        Loan loan = new Loan(500, 2);
-        assertEquals(10,loan.getRate());
+//    @Test
+//    public void testsetRate(){
+//        Loan loan = new Loan(500, 2);
+//        assertEquals(10,loan.getRate());
+//    }
+
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "rateResource.csv")
+    void testsetRate(int amount, int period, int expected){
+        Loan loan = new Loan(amount, period);
+        assertEquals(expected, loan.getRate());
     }
 
 
