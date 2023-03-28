@@ -5,7 +5,20 @@ import org.junit.jupiter.params.provider.CsvFileSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 public class TestLoan {
+
+    @Test
+    public void TestConstructor(){
+        Loan loan = new Loan(500, 3);
+        assertEquals(3, loan.getPeriod());
+        assertEquals(500,loan.getAmount());
+        assertEquals(10, loan.getRate());
+    }
+
+
     //Test Period
     @Test
     public void testperiod(){
@@ -143,11 +156,21 @@ public class TestLoan {
 
     @ParameterizedTest
     @CsvFileSource(resources = "rateResource.csv")
-    void testsetRate(int amount, int period, int expected){
+    void testparamRate(int amount, int period, int expected){
         Loan loan = new Loan(amount, period);
         assertEquals(expected, loan.getRate());
     }
 
 
+    @Test
+    public void testsetRate() throws Exception{
+        Loan loan = new Loan(500, 2);
+        Class secretclass  = loan.getClass();
+        Field f = secretclass.getDeclaredField("annualRate");
+        f.setAccessible(true);
+        double result = f.getDouble(loan);
+        assertEquals(10, result);
+
+    }
 
 }
