@@ -119,6 +119,11 @@ public class TestLoan {
         });
     }
 
+
+
+
+
+
     @Test()
     public void NagativeTest4() throws IllegalArgumentException{
         assertThrows(IllegalArgumentException.class, () -> {
@@ -173,4 +178,29 @@ public class TestLoan {
 
     }
 
+
+    @Test
+    public void testsetAmount() throws Exception{
+        Loan loan = new Loan(500, 1);
+        Class secretclass = loan.getClass();
+        Field f = secretclass.getDeclaredField("loanAmount");
+        f.setAccessible(true);
+        double result = f.getDouble(loan);
+        assertEquals(500, result);
+
+    }
+
+    @Test
+    public void testsetPeriod() throws Exception{
+        Loan loan = new Loan(500, 1);
+        Class secretclass = loan.getClass();
+        Field f = secretclass.getDeclaredField("numberOfPayments");
+        f.setAccessible(true);
+        int result = f.getInt(loan);
+        assertEquals(12, result);
+
+    }
+
+
 }
+
