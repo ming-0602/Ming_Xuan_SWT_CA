@@ -2,20 +2,42 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestLoan {
 
     @Test
     public void TestConstructor(){
+        Loan loanNull = new Loan();
+        assertNotNull(loanNull);
         Loan loan = new Loan(500, 3);
         assertEquals(3, loan.getPeriod());
         assertEquals(500,loan.getAmount());
         assertEquals(10, loan.getRate());
+    }
+
+    @Test
+    public void testloan() throws Exception{
+        Method setPeriod = Loan.class.getDeclaredMethod("setPeriod", int.class);
+        Method setAmount = Loan.class.getDeclaredMethod("setAmount", double.class);
+        Method setRate = Loan.class.getDeclaredMethod("setRate", int.class);
+
+        setPeriod.setAccessible(true);
+        setAmount.setAccessible(true);
+        setRate.setAccessible(true);
+
+        Loan subject = new Loan();
+
+        setPeriod.invoke(subject, 3);
+        setAmount.invoke(subject, 500);
+        setRate.invoke(subject,3);
+
+        assertEquals(3, subject.getPeriod());
+        assertEquals(500, subject.getAmount());
+        assertEquals(10, subject.getRate());
     }
 
 
@@ -152,12 +174,6 @@ public class TestLoan {
         });
     }
 
-//    @Test
-//    public void testsetRate(){
-//        Loan loan = new Loan(500, 2);
-//        assertEquals(10,loan.getRate());
-//    }
-
 
     @ParameterizedTest
     @CsvFileSource(resources = "rateResource.csv")
@@ -175,7 +191,6 @@ public class TestLoan {
         f.setAccessible(true);
         double result = f.getDouble(loan);
         assertEquals(10, result);
-
     }
 
 
@@ -198,7 +213,6 @@ public class TestLoan {
         f.setAccessible(true);
         int result = f.getInt(loan);
         assertEquals(12, result);
-
     }
 
 
